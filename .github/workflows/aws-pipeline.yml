@@ -36,6 +36,8 @@ jobs:
         env:
           CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_ACCOUNT }}
           CDK_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
-        run: cdk deploy --app="python3 ${PWD}/app.py" --require-approval=never
+        run: |
+          cdk bootstrap aws://$CDK_DEFAULT_ACCOUNT/$CDK_DEFAULT_REGION
+          cdk deploy --app="python3 ${PWD}/app.py" --require-approval=never
       # - name: Destroy stack
       #   run: cdk destroy --app="python3 ${PWD}/cdk/my_service/app.py" --force
