@@ -155,12 +155,13 @@ async def ui_home():
                 Card(
                     CardHeader(
                         Div(
-                            CardTitle("Cat vs Dog Classifier 🐱 🐶"),
-                            Badge("AI Powered", variant="secondary", cls="w-fit"),
+                            CardTitle("Cat vs Dog Classifier 🐱 🐶", cls="text-3xl font-extrabold text-indigo-600"),
+                            Badge("AI Powered", variant="secondary", cls="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm"),
                             cls="flex items-center justify-between",
                         ),
                         CardDescription(
-                            "Upload an image to classify whether it's a cat or a dog. Our AI model will analyze it instantly!"
+                            "Upload an image to classify whether it's a cat or a dog. Our AI model will analyze it instantly!",
+                            cls="text-lg text-gray-600"
                         ),
                     ),
                     CardContent(
@@ -172,19 +173,19 @@ async def ui_home():
                                         name="file",
                                         accept="image/*",
                                         required=True,
-                                        cls="mb-4 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 file:cursor-pointer",
+                                        cls="mb-4 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 file:cursor-pointer",
                                     ),
                                     P(
                                         "Drag and drop an image or click to browse",
-                                        cls="text-sm text-muted-foreground text-center mt-2",
+                                        cls="text-sm text-gray-500 text-center mt-2 font-medium",
                                     ),
-                                    cls="border-2 border-dashed rounded-lg p-4 hover:border-primary/50 transition-colors",
+                                    cls="border-2 border-dashed rounded-lg p-4 hover:border-indigo-400 transition-colors",
                                 ),
                                 Button(
                                     Lucide("sparkles", cls="mr-2 h-4 w-4"),
                                     "Predict Image",
                                     type="submit",
-                                    cls="w-full",
+                                    cls="w-full bg-indigo-600 text-white py-2 px-4 rounded-md text-lg font-semibold hover:bg-indigo-700 transition-all",
                                 ),
                                 cls="space-y-4",
                             ),
@@ -194,12 +195,12 @@ async def ui_home():
                         ),
                         Div(id="result", cls="mt-6"),
                     ),
-                    cls="w-full max-w-3xl shadow-lg",
+                    cls="w-full max-w-3xl shadow-lg bg-white rounded-lg",
                     standard=True,
                 ),
-                cls="container flex items-center justify-center min-h-screen p-4",
+                cls="container flex items-center justify-center min-h-screen p-4 bg-gradient-to-br from-gray-100 to-indigo-100",
             ),
-            cls="bg-background text-foreground",
+            cls="bg-gray-50 text-gray-900",
         ),
     )
     return to_xml(content)
@@ -227,14 +228,14 @@ async def predict_ui(file: Annotated[bytes, File()]):
                 Img(
                     src=f"data:image/jpeg;base64,{image_b64}", 
                     alt="Uploaded Image",
-                    cls="w-full rounded-lg mb-4"
+                    cls="w-full rounded-lg mb-4 shadow-md"
                 ),
                 Badge(
                     f"Prediction: {top_class} (Confidence: {confidence:.1%})",
                     variant="outline",
-                    cls="w-full text-center"
+                    cls="w-full text-center text-lg bg-green-100 text-green-800 rounded-md px-4 py-2",
                 ),
-                Progress(value=int(confidence * 100), cls="mt-2"),
+                Progress(value=int(confidence * 100), cls="mt-2 h-2 bg-indigo-200"),
                 cls="space-y-4"
             ),
             cls="animate-in fade-in duration-500"
@@ -243,7 +244,7 @@ async def predict_ui(file: Annotated[bytes, File()]):
         return to_xml(results)
     
     except Exception as e:
-        return to_xml(Div(f"Error : {str(e)}", cls="text-red-500"))
+        return to_xml(Div(f"Error : {str(e)}", cls="text-red-500 text-lg font-bold"))
 
 
 @app.post("/classify", response_model=PredictionResponse)
