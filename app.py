@@ -123,6 +123,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+class PredictionResponse(BaseModel):
+    """Response model for predictions"""
+
+    predictions: dict  # Change to dict for class probabilities
+    success: bool
+    message: str
+
 # Initialize model
 try:
     model = ModelInference("model.onnx")
@@ -237,6 +244,29 @@ async def predict_ui(file: Annotated[bytes, File()]):
     
     except Exception as e:
         return to_xml(Div(f"Error : {str(e)}", cls="text-red-500"))
+
+
+@app.post("/classify", response_model=PredictionResponse)
+async def classify(file: Annotated[bytes, File(description="Image file to classify")]):
+    try:
+        image = Image.open(io.BytesIO(file))
+
+        predictions = model.predict(image)
+        
+        # Prepare base64 image for display
+        image_b64 = base64.b64encode(file).decode('utf-8')
+        
+        # Determine top prediction
+        top_class = max(predictions, key=predictions.get)
+        confidence = predictions[top_class]
+
+        return PredictionResponse(
+            predictions={top_class: confidence}, success=True, message="Classification successful"
+        )
+
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail=f"Error processing image: {str(e)}")
 
 @app.get("/health")
 async def health_check():

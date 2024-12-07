@@ -2,7 +2,7 @@ import requests
 import os
 from pathlib import Path
 
-def predict_image(image_path: str, api_url: str = "http://localhost:8000/predict") -> dict:
+def predict_image(image_path: str, api_url: str = "http://localhost:8000/classify") -> dict:
     """
     Send an image to the prediction API and get results
     
@@ -23,7 +23,7 @@ def predict_image(image_path: str, api_url: str = "http://localhost:8000/predict
         
         # Make the request
         response = requests.post(api_url, files=files)
-        
+        print(response.text)
         # Check if request was successful
         response.raise_for_status()
         
