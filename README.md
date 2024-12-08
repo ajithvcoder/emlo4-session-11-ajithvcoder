@@ -4,7 +4,7 @@
 
 - [Requirements](#requirements)
 - [Development Method](#development-method)
-    - [AWS CDK Integration](#aws=cdk-Integration)
+    - [AWS CDK Integration](#aws-cdk-integration)
     - [Github Actions Pipeline](#github-actions-pipeline)
 - [Learnings](#learnings)
 - [Results Screenshots](#results-screenshots)
